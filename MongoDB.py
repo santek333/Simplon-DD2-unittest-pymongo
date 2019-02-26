@@ -5,8 +5,9 @@ class Film:
 
   def get_nb_films(db):
     # retourne le nombre de films présents dans la base
+    films = db.films.find()
 
-    return 0
+    return len(list(films))
     
   def get_actors(self, db):
     # retourne la liste des acteurs du film
