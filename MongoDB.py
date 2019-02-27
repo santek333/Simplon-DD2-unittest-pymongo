@@ -1,3 +1,4 @@
+from pymongo import MongoClient
 class Film:
 
   def __init__(self, id):
@@ -19,16 +20,18 @@ class Film:
 
 class Actor:
 
-  def __init__(self, name):
-    self.name = name
+  def __init__(self):
     self.films = []
 
   def add_film(self, film):
     self.films.append(film)
 
-  def load(self, db):
+  def load(dico):
     # ajoute l'acteur dans la base de données
-    pass
+    client = MongoClient('localhost', 27017)
+    db = client.unittest_pymongo
+    insert_doc = db.actors
+    insert_doc.insert_one(dico)
 
   def get_nb_actors(db):
     # retourne le nombre d'acteurs présents dans la base

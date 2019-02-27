@@ -1,30 +1,33 @@
 
 from Scrapping import *
 from pymongo import MongoClient
+from MongoDB import Actor
 
 client = MongoClient('localhost', 27017)
 db = client.unittest_pymongo
 
-# method 1
+def clean_actor(actor):
+  actor_nettoye = actor.replace('\n','').replace('.','').strip()
+  return actor_nettoye
+
+def clean_title(title):
+  title_nettoye = title.replace('\xa0','')
+  return title_nettoye
+
 dico_actor={}
 for film in db.films.find():
     for actor in film.get('actors'):
-        if actor not in dico_actor:
-            dico_actor[actor.replace('\n','')]=[]
-        dico_actor[actor.replace('\n','')].append(film.get('title').replace('\xa0',' '))
+      act=clean_actor(actor)
+      if act not in dico_actor:
+          dico_actor[act]=[]
+          tit = film.get('title')
+          titre = clean_title(tit)
+      dico_actor[act].append(titre)
+
 print(dico_actor)
 
-print('######################################')
-print('######################################')
-
-# method 2
-dico_actor2={}
-for film in db.films.find():
-  for actor in film['actors']:
-    if actor not in dico_actor2:
-      dico_actor2[actor.replace('\n','')]=[]
-    dico_actor2[actor.replace('\n','')].append(film['title'])
-print(dico_actor2)
+o=Actor
+o.load(dico_actor)
 
 client.close()
 
